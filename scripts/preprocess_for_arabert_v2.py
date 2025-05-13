@@ -42,15 +42,19 @@ def main():
     # حفظ النسخة الكاملة
     df[["cleaned_text", "label_id"]].to_csv(f"{output_folder}/full_dataset.csv", index=False, encoding='utf-8-sig')
 
-    # تقسيم البيانات بدون stratify
-    train, temp = train_test_split(df, test_size=0.3, random_state=42)
+    # ✅ تقسيم البيانات مع stratify
+   # تقسيم أول فيه stratify
+    train, temp = train_test_split(df, test_size=0.3, random_state=42, stratify=df["label_id"])
+
+    # تقسيم ثاني بدون stratify (لأن temp فيه فئة واحدة فقط أحيانًا)
     val, test = train_test_split(temp, test_size=0.5, random_state=42)
+
 
     train[["cleaned_text", "label_id"]].to_csv(f"{output_folder}/train.csv", index=False, encoding='utf-8-sig')
     val[["cleaned_text", "label_id"]].to_csv(f"{output_folder}/val.csv", index=False, encoding='utf-8-sig')
     test[["cleaned_text", "label_id"]].to_csv(f"{output_folder}/test.csv", index=False, encoding='utf-8-sig')
 
-    print("✅ تم تنظيف وتقسيم البيانات بنجاح!")
+    print("✅ تم تنظيف وتقسيم البيانات باستخدام stratify بنجاح!")
 
 if __name__ == "__main__":
     main()
